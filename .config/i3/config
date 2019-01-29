@@ -16,7 +16,7 @@ floating_modifier $mod
 # if the currect workspace is empty, then it will open the terminal
 # as floating enabled. If there is a window in the current workspace, then the 
 # terminal will open like other windows
-bindsym $mod+Return exec --no-startup-id python ~/scripts/term.py
+# bindsym $mod+Return exec --no-startup-id python ~/scripts/term.py
 
 # kill focused window
 bindsym $mod+q kill
@@ -25,6 +25,7 @@ bindsym $mod+q kill
 bindsym $mod+d exec rofi -show drun
 
 # change focus
+
 bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
@@ -74,6 +75,9 @@ bindsym $mod+a focus parent
 # run work screen layout using xrandr script
 bindsym $mod+Shift+s exec /home/harrison/work.sh
 
+# find id of window
+#bindsym $mod+Shift+o exec xprop
+
 # focus the child container
 #bindsym $mod+d focus child
 
@@ -118,6 +122,10 @@ bindsym $mod+Shift+0 move container to workspace $ws10
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
+
+#cycle wallpaper
+bindsym $mod+Shift+w exec ~/scripts/background.sh
+
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -161,8 +169,8 @@ bindsym $mod+r mode "resize"
 # the pixles of the gaps
 gaps inner 18
 
-# gives a border to the windows. 
-for_window [class="*"] border pixel 2
+# gives a5border to the windows. 
+for_window [class="^.*"] border pixel 1
 
 # pop ups are floating
 for_window [window_role="pop-up"] floating enable
@@ -181,9 +189,31 @@ for_window [class="SimpleScreenRecorder"] floating enable
 for_window [class="Keybase"] floating enable
 
 # color of the borders
-client.focused #ffffff #ffffff #ffffff #ffffff 
-#client.urgent #900000 #900000 #ffffff #c8395b
-client.urgent #7ec0c3 #FFFFFF #FFFFFF #7ec0c3 
+set_from_resource $c0 i3wm.color0 #f0f0f0
+ set_from_resource $c1 i3wm.color1 #f0f0f0
+ set_from_resource $c2 i3wm.color2 #f0f0f0
+ set_from_resource $c3 i3wm.color3 #f0f0f0
+ set_from_resource $c4 i3wm.color4 #f0f0f0
+ set_from_resource $c5 i3wm.color5 #f0f0f0
+ set_from_resource $c6 i3wm.color6 #f0f0f0
+ set_from_resource $c7 i3wm.color7 #f0f0f0
+ set_from_resource $c8 i3wm.color8 #f0f0f0
+ set_from_resource $c9 i3wm.color9 #f0f0f0
+ set_from_resource $c10 i3wm.color10 #f0f0f0
+ set_from_resource $c11 i3wm.color11 #f0f0f0
+ set_from_resource $c12 i3wm.color12 #f0f0f0
+ set_from_resource $c13 i3wm.color13 #f0f0f0
+ set_from_resource $c14 i3wm.color14 #f0f0f0
+ set_from_resource $c15 i3wm.color15 #f0f0f0
+
+ # class                 border  backgr. text indicator child_border
+ client.focused          $c7     $c7     $c0  $c7       $c7
+ client.focused_inactive $c2     $c2     $c7  $c2       $c2
+ client.unfocused        $c2     $c2     $c7  $c2       $c2
+ client.urgent           $c4     $c4     $c0  $c2       $c2
+ client.placeholder      $c15     $c2     $c7  $c2       $c2
+
+ client.background       $c0
 
 # mouse, please stop focus whenever you hover to whatever windows plz :(
 focus_follows_mouse no
@@ -201,8 +231,8 @@ new_window none
 # Automaticaly sets wallpaper. Just the the wallpaper
 # you want in the Wallpapers directory then it will 
 # automaticaly set it on start up.
-# exec_always --no-startup-id feh --bg-fill ~/Pictures/Wallpaper/*
-exec_always --no-startup-id ~/scripts/background.sh
+# exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpaper/*
+# exec --no-startup-id ~/scripts/background.sh
 
 # allows sound
 exec_always --no-startup-id start-pulseaudio-x11
@@ -210,9 +240,11 @@ exec_always --no-startup-id start-pulseaudio-x11
 # notification when i pull the charging plug out and put it in
 # exec_always --no-startup-id python3 ~/scripts/chargestatus.py
 
+# load nm-applet on startup
+exec_always --no-startup-id nm-applet
 
 # nice window effects and some shadow
-exec_always --no-startup-id compton --config ~/.config/compton.conf
+exec --no-startup-id compton --config ~/.config/compton.conf
 
 # my eyes love the brightness set to 5%
 exec_always --no-startup-id xbacklight -set 5
@@ -223,9 +255,10 @@ exec_always --no-startup-id bash ~/.config/polybar/launch.sh
 # i like music
 exec --no-startup-id mpd
 
-# uses my wallpaper as my lockscreen image
-exec --no-startup-id betterlockscreen -u Pictures/Wallpaper/ -w blur -t "oi, nah. You gotta know the secret code to get in"
+# set wallpaper for betterlockscreen
+exec_always betterlockscreen -u (cat ~/scripts/last)
 
+# spotify on start up
 exec --no-startup-id spotify
 
 ##################
@@ -248,14 +281,7 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 
 # starts the  betterlockscreen lockscreen
 bindsym $mod+Shift+x exec --no-startup-id betterlockscreen -s
-bindsym $mod+x exec --no-startup-id betterlockscreen -l -w blur -t "Speak friend and enter" 
-
-# music control
-bindsym XF86AudioNext exec mpc next && notify-send "Now Playing ♫" "$(mpc current)"
-bindsym XF86AudioPrev exec mpc prev && notify-send "Now Playing ♫" "$(mpc current)"
-bindsym XF86AudioPlay exec mpc toggle
-bindsym XF86AudioStop exec mpc stop
-
+bindsym $mod+x exec --no-startup-id i3lock 
 
 # screenshot fullscreen
 bindsym $mod+p exec ~/scripts/screenshot.sh
@@ -263,10 +289,10 @@ bindsym $mod+p exec ~/scripts/screenshot.sh
 # screenshot selected area
 # You need to use `--release` in the binding.
 # See "4.3. Keyboard bindings" on i3wm docs 
-bindsym $mod+o --release exec bash ~/scripts/screenshot.sh -s
+#bindsym $mod+o --release exec bash ~/scripts/screenshot.sh -s
 
 # a very cool emoji and unicode character picker using rofi
 bindsym $mod+Shift+d exec ~/.config/rofi/scripts/picker.sh
 
 # open up my file manager
-bindsym $mod+Shift+Return exec thunar 
+#bindsym $mod+Shift+Return exec ranger
