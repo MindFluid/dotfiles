@@ -94,6 +94,17 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
+# assign each of 3 monitors 2 workspaces
+workspace 1 output eDP-1
+workspace 2 output DP-1-1
+workspace 3 output DP-1-2
+workspace 4 output eDP-1
+workspace 5 output DP-1-1
+workspace 6 output DP-1-2
+
+# push windows to their respective workspaces
+assign [class="spotify$"] 2
+
 # switch to workspace
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
@@ -173,10 +184,10 @@ gaps inner 18
 for_window [class="^.*"] border pixel 1
 
 # pop ups are floating
-for_window [window_role="pop-up"] floating enable
+#for_window [window_role="pop-up"] floating enable
 
 # task dialogs are floating
-for_window [window_role="task_dialog"] floating enable
+#for_window [window_role="task_dialog"] floating enable
 
 # i like having the image viewer floating
 for_window [class="Viewnior"] floating enable
@@ -228,11 +239,18 @@ new_window none
 # exec -> On start-up
 # exec_always -> On start-up and reload
 
+exec --no-startup-id ~/.config/i3/startup
+
 # Automaticaly sets wallpaper. Just the the wallpaper
 # you want in the Wallpapers directory then it will 
 # automaticaly set it on start up.
 # exec_always --no-startup-id feh --bg-scale ~/Pictures/Wallpaper/*
 # exec --no-startup-id ~/scripts/background.sh
+
+exec --no-startup-id ~/scripts/background.sh
+
+# auto work monitor set-up
+exec /home/harrison/work.sh   
 
 # allows sound
 exec_always --no-startup-id start-pulseaudio-x11
@@ -249,9 +267,6 @@ exec --no-startup-id compton --config ~/.config/compton.conf
 # my eyes love the brightness set to 5%
 exec_always --no-startup-id xbacklight -set 5
 
-# starts the launch.sh script which launches polybar
-exec_always --no-startup-id bash ~/.config/polybar/launch.sh
-
 # i like music
 exec --no-startup-id mpd
 
@@ -259,7 +274,15 @@ exec --no-startup-id mpd
 exec_always betterlockscreen -u (cat ~/scripts/last)
 
 # spotify on start up
-exec --no-startup-id spotify
+#exec --no-startup-id spotify
+
+exec i3-msg 'workspace 1; exec termite; workspace 1;'
+exec i3-msg 'workspace 4; exec spotify;'
+exec i3-msg 'workspace 2; exec code;'
+exec i3-msg 'workspace 3; exec firefox;' 
+
+#start polybar
+exec_always --no-startup-id bash ~/.config/polybar/launch.sh
 
 ##################
 ## Key bindings ##

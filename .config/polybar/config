@@ -63,7 +63,7 @@ pin-workspaces = true
 
 ; This will split the workspace name on ':'
 ; Default: false
-strip-wsnumbers = true
+strip-wsnumbers = false
 
 ; Sort the workspaces by index instead of the default
 ; sorting that groups the workspaces by output
@@ -72,7 +72,7 @@ index-sort = true
 
 ; Create click handler used to focus workspace
 ; Default: true
-enable-click = false
+enable-click = true
 
 ; Create scroll handlers used to cycle workspaces
 ; Default: true
@@ -98,25 +98,33 @@ label-mode-foreground = #000
 label-mode-background = ${colors.foreground}
 
 ; focused = Active workspace on focused monitor
-label-focused = %index%
+label-focused = %icon%
 label-focused-background = #555
 label-focused-underline = ${colors.color3}
 label-focused-padding = 3
 
 ; unfocused = Inactive workspace on any monitor
-label-unfocused = %index%
+label-unfocused = %icon%
 label-unfocused-padding = 3
 
 ; visible = Active workspace on unfocused monitor
-label-visible = %index%
+label-visible = %icon%
 label-visible-background = ${colors.background}
 label-visible-underline = ${colors.color1}
 label-visible-padding = 3
 
 ; urgent = Workspace with urgency hint set
-label-urgent = %index%
+label-urgent = %icon%
 label-urgent-background = #600
 label-urgent-padding = 3
+
+ws-icon-0 = "1;"
+ws-icon-1 = "4;"
+ws-icon-2 = "2;"
+ws-icon-3 = "4;4"
+ws-icon-4 = "3;"
+ws-icon-5 = "6;6"
+ws-icon-6 = "7;7"
 
 ; Separator in between workspaces
 ; label-separator = |
